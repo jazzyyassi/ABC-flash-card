@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Phonics Flashcards</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Comic Sans MS', sans-serif;
+            background-color: white;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        #app {
+            text-align: center;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .big-letter {
+            font-size: 50vh;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .card-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .emoji {
+            font-size: 30vh;
+        }
+
+        .word {
+            font-size: 15vh;
+            text-transform: uppercase;
+            color: #007bff;
+            margin-top: 10px;
+        }
+
+        .fade-in {
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="app" onclick="handleTap()">
+        <div id="display" class="big-letter fade-in">A</div>
+    </div>
+
+    <script>
+        const cards = [
+            { l: "A", w: "ANT", e: "🐜" },
+            { l: "B", w: "BAT", e: "🦇" },
+            { l: "C", w: "CAT", e: "🐱" },
+            { l: "D", w: "DOG", e: "🐶" },
+            { l: "E", w: "EGG", e: "🥚" },
+            { l: "F", w: "FAN", e: "🪭" },
+            { l: "G", w: "GUM", e: "🍬" },
+            { l: "H", let: "HAT", e: "🎩" },
+            { l: "P", w: "PIG", e: "🐷" },
+            { l: "S", w: "SUN", e: "☀️" }
+        ];
+
+        let index = 0;
+        let isWordView = false;
+        const display = document.getElementById('display');
+
+        function speak(text) {
+            const msg = new SpeechSynthesisUtterance(text);
+            msg.rate = 0.8;
+            window.speechSynthesis.speak(msg);
+        }
+
+        function handleTap() {
+            const current = cards[index];
+            if (!isWordView) {
+                // Show Image + Word
+                display.classList.remove('big-letter');
+                display.innerHTML = `
+                    <div class="card-content fade-in">
+                        <div class="emoji">${current.e}</div>
+                        <div class="word">${current.w}</div>
+                    </div>`;
+                speak(current.w);
+                isWordView = true;
+            } else {
+                // Show Next Letter
+                index = (index + 1) % cards.length;
+                display.classList.add('big-letter');
+                display.innerHTML = cards[index].l;
+                speak(cards[index].l);
+                isWordView = false;
+            }
+        }
+    </script>
+</body>
+</html>
