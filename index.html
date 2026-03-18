@@ -6,61 +6,27 @@
     <title>Phonics Flashcards</title>
     <style>
         body, html {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-family: 'Comic Sans MS', sans-serif;
-            background-color: white;
-            overflow: hidden;
-            user-select: none;
-            touch-action: manipulation;
+            margin: 0; padding: 0; height: 100%; width: 100%;
+            display: flex; justify-content: center; align-items: center;
+            font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
+            background-color: white; overflow: hidden;
+            user-select: none; touch-action: manipulation;
         }
-
-        #app {
-            text-align: center;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
+        #app { text-align: center; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
+        .big-letter { font-size: 55vh; font-weight: bold; color: #333; }
+        .card-content { display: flex; flex-direction: column; align-items: center; width: 95%; }
+        
+        .photo {
+            max-width: 90%;
+            max-height: 50vh;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            object-fit: contain;
         }
-
-        .big-letter {
-            font-size: 50vh;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .card-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        .emoji {
-            font-size: 30vh;
-        }
-
-        .word {
-            font-size: 15vh;
-            text-transform: uppercase;
-            color: #007bff;
-            margin-top: 10px;
-        }
-
-        .fade-in {
-            animation: fadeIn 0.2s ease-in;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
+        
+        .word { font-size: 15vh; text-transform: uppercase; color: #007bff; font-weight: bold; }
+        .fade-in { animation: fadeIn 0.15s ease-in; }
+        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     </style>
 </head>
 <body>
@@ -70,6 +36,7 @@
     </div>
 
     <script>
+        // EXACT FORMAT AS REQUESTED
         const cards = [
             { l: "A", w: "ANT", img: "ANT.png" },
             { l: "B", w: "BAT", img: "BAT.png" },
@@ -105,24 +72,25 @@
 
         function speak(text) {
             const msg = new SpeechSynthesisUtterance(text);
-            msg.rate = 0.8;
+            msg.rate = 0.85; 
             window.speechSynthesis.speak(msg);
         }
 
         function handleTap() {
             const current = cards[index];
+            
             if (!isWordView) {
-                // Show Image + Word
+                // SWITCH TO IMAGE/WORD VIEW
                 display.classList.remove('big-letter');
                 display.innerHTML = `
                     <div class="card-content fade-in">
-                        <div class="emoji">${current.e}</div>
+                        <img src="${current.img}" class="photo" alt="${current.w}">
                         <div class="word">${current.w}</div>
                     </div>`;
                 speak(current.w);
                 isWordView = true;
             } else {
-                // Show Next Letter
+                // MOVE TO NEXT LETTER
                 index = (index + 1) % cards.length;
                 display.classList.add('big-letter');
                 display.innerHTML = cards[index].l;
@@ -130,6 +98,8 @@
                 isWordView = false;
             }
         }
+        
+        window.onload = () => speak(cards[0].l);
     </script>
 </body>
 </html>
