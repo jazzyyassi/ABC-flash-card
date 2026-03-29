@@ -5,101 +5,142 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Phonics Flashcards</title>
     <style>
+        * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0; height: 100%; width: 100%;
             display: flex; justify-content: center; align-items: center;
             font-family: 'Arial Rounded MT Bold', 'Helvetica', sans-serif;
-            background-color: white; overflow: hidden;
+            background-color: #FCFDF7; overflow: hidden;
             user-select: none; touch-action: manipulation;
         }
-        #app { text-align: center; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; cursor: pointer; }
-        .big-letter { font-size: 55vh; font-weight: bold; color: #333; }
-        .card-content { display: flex; flex-direction: column; align-items: center; width: 95%; }
-        
+
+        #app {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            height: 100%;
+            padding: 20px 0 10px;
+        }
+
+        #card {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .letter {
+            font-size: 18vw;
+            font-weight: bold;
+            color: #333;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
         .photo {
-            max-width: 90%;
-            max-height: 50vh;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            max-width: 88%;
+            max-height: 62vh;
+            border-radius: 18px;
             object-fit: contain;
         }
-        
-        .word { font-size: 15vh; text-transform: uppercase; color: #007bff; font-weight: bold; }
-        .fade-in { animation: fadeIn 0.15s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+        .fade-in {
+            animation: fadeIn 0.2s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        #nav {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            padding: 10px 0 16px;
+        }
+
+        .arrow-btn {
+            background: #f0f0f0;
+            border: none;
+            border-radius: 50%;
+            width: 72px;
+            height: 72px;
+            font-size: 34px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.15s, transform 0.1s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .arrow-btn:active {
+            background: #d0e8ff;
+            transform: scale(0.92);
+        }
     </style>
 </head>
 <body>
 
-    <div id="app" onclick="handleTap()">
-        <div id="display" class="big-letter fade-in">A</div>
+    <div id="app">
+        <div id="card"></div>
+        <div id="nav">
+            <button class="arrow-btn" onclick="navigate(-1)">&#8592;</button>
+            <button class="arrow-btn" onclick="navigate(1)">&#8594;</button>
+        </div>
     </div>
 
     <script>
-        // EXACT FORMAT AS REQUESTED
         const cards = [
-            { l: "A", w: "ANT", img: "ANT.png" },
-            { l: "B", w: "BAT", img: "BAT.png" },
-            { l: "C", w: "CAT", img: "CAT.png" },
-            { l: "D", w: "DOG", img: "DOG.png" },
-            { l: "E", w: "EGG", img: "EGG.png" },
-            { l: "F", w: "FAN", img: "FAN.png" },
-            { l: "G", w: "GUM", img: "GUM.png" },
-            { l: "H", w: "HAT", img: "HAT.png" },
-            { l: "I", w: "INK", img: "INK.png" },
-            { l: "J", w: "JAM", img: "JAM.png" },
-            { l: "K", w: "KIT", img: "KIT.png" },
-            { l: "L", w: "LOG", img: "LOG.png" },
-            { l: "M", w: "MAP", img: "MAP.png" },
-            { l: "N", w: "NET", img: "NET.png" },
-            { l: "O", w: "OX", img: "OX.png" },
-            { l: "P", w: "PIG", img: "PIG.png" },
-            { l: "Q", w: "QUEEN", img: "QUEEN.png" },
-            { l: "R", w: "RAT", img: "RAT.png" },
-            { l: "S", w: "SUN", img: "SUN.png" },
-            { l: "T", w: "TEN", img: "TEN.png" },
-            { l: "U", w: "UP", img: "UP.png" },
-            { l: "V", w: "VAN", img: "VAN.png" },
-            { l: "W", w: "WIG", img: "WIG.png" },
-            { l: "X", w: "BOX", img: "BOX.png" },
-            { l: "Y", w: "YAK", img: "YAK.png" },
-            { l: "Z", w: "ZIP", img: "ZIP.png" }
+            { l: "A", img: "images/ANT.JPG" },
+            { l: "B", img: "images/BAT.JPG" },
+            { l: "C", img: "images/CAT.JPG" },
+            { l: "D", img: "images/DOG.JPG" },
+            { l: "E", img: "images/EVE.JPG" },
+            { l: "F", img: "images/FAN.JPG" },
+            { l: "G", img: "images/GAP.JPG" },
+            { l: "H", img: "images/HAT.JPG" },
+            { l: "I", img: "images/ICE.JPG" },
+            { l: "J", img: "images/JASPER.JPG" },
+            { l: "K", img: "images/KEY.JPG" },
+            { l: "L", img: "images/LIP.JPG" },
+            { l: "M", img: "images/MAX.JPG" },
+            { l: "N", img: "images/NO.JPG" },
+            { l: "O", img: "images/OX.JPG" },
+            { l: "P", img: "images/PEN.JPG" },
+            { l: "Q", img: "images/QUEEN.JPG" },
+            { l: "R", img: "images/RAT.JPG" },
+            { l: "S", img: "images/SUN.JPG" },
+            { l: "T", img: "images/TOE.JPG" },
+            { l: "U", img: "images/UP.JPG" },
+            { l: "V", img: "images/VAN.JPG" },
+            { l: "W", img: "images/WATER.JPG" },
+            { l: "X", img: "images/XRAY.JPG" },
+            { l: "Y", img: "images/YES.JPG" },
+            { l: "Z", img: "images/ZIP.JPG" }
         ];
 
         let index = 0;
-        let isWordView = false;
-        const display = document.getElementById('display');
+        const card = document.getElementById('card');
 
-        function speak(text) {
-            const msg = new SpeechSynthesisUtterance(text);
-            msg.rate = 0.85; 
-            window.speechSynthesis.speak(msg);
-        }
-
-        function handleTap() {
+        function render() {
             const current = cards[index];
-            
-            if (!isWordView) {
-                // SWITCH TO IMAGE/WORD VIEW
-                display.classList.remove('big-letter');
-                display.innerHTML = `
-                    <div class="card-content fade-in">
-                        <img src="${current.img}" class="photo" alt="${current.w}">
-                        <div class="word">${current.w}</div>
-                    </div>`;
-                speak(current.w);
-                isWordView = true;
-            } else {
-                // MOVE TO NEXT LETTER
-                index = (index + 1) % cards.length;
-                display.classList.add('big-letter');
-                display.innerHTML = cards[index].l;
-                speak(cards[index].l);
-                isWordView = false;
-            }
+            card.innerHTML = `
+                <div class="fade-in" style="display:flex;flex-direction:column;align-items:center;">
+                    <img src="${current.img}" class="photo" alt="${current.l}">
+                </div>`;
         }
-        
-        window.onload = () => speak(cards[0].l);
+
+        function navigate(dir) {
+            index = (index + dir + cards.length) % cards.length;
+            render();
+        }
+
+        window.onload = render;
     </script>
 </body>
 </html>
